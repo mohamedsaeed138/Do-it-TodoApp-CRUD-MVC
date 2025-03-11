@@ -82,6 +82,34 @@ This project is a **CRUD (Create, Read, Update, Delete) task management system**
 4. Add, edit, and delete tasks from the task list page.
 5. Track task status and priority levels.
 
+## 📸 Screenshots
+
+Here are some screenshots showcasing the app's features:
+
+### 🔑 Authentication
+
+<img src="Screenshots/Login.png" alt="Login Page" width="600"/>
+<p>🔐 Login Page</p>
+
+<img src="Screenshots/Register.png" alt="Register Page" width="600"/>
+<p>📝 Register Page</p>
+
+### 📋 Todo Lists
+
+<img src="Screenshots/Todo%20Lists%20Index.png" alt="Todo Lists Index" width="600"/>
+<p>📌 Todo Lists Overview</p>
+
+<img src="Screenshots/Edit%20Todo%20List.png" alt="Edit Todo List" width="600"/>
+<p>✏️ Edit Todo List</p>
+
+### ✅ Managing Todos
+
+<img src="Screenshots/Todos%20Index.png" alt="Todos Index" width="600"/>
+<p>📋 Todos Overview</p>
+
+<img src="Screenshots/Create%20Todo.png" alt="Create Todo" width="600"/>
+<p>➕ Create a New Todo</p>
+
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
