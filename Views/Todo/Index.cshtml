@@ -1,0 +1,222 @@
+﻿@using TodoApp.Helpers
+@model List<Todo>
+@{
+    List<string> listsTitles = (List<string>)ViewData["ListsTitles"]!;
+    Priority[] priorities = (Priority[] )ViewData["Priorities"]!;
+    Status[] statuses = (Status[])ViewData["Statuses"]!;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>My Todos - Todo App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  @* <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet" /> *@
+
+  <link rel="stylesheet" href="~/css/todo_index.css" />
+  <link rel="icon" href="~/vectors/icon.svg" type="favicon.ico" />
+</head>
+
+<body>
+  <!-- start header -->
+
+  <header class="navbar">
+    <div class="navbar-content">
+      <img src="~/vectors/logo.svg" alt="Do it" class="site-logo" />
+      <nav>
+        <a class="nav-button lists" asp-controller="TodoList" asp-action="Index">Lists</a>
+        <a asp-controller="Todo" asp-action="Index" class="nav-button todos">Todos</a>
+                <a asp-controller="Account" asp-action="Logout" class="nav-button logout">Logout</a>
+      </nav>
+    </div>
+  </header>
+  <div class="search-container">
+    <input type="text" id="search-box" placeholder="🔍 Search todos..." />
+    <div class="filters-container">
+            <div class="filter-group">
+                <label for="list-filter">List</label>
+                <select id="list-filter">
+                    <option value="All">🗂️ All</option>
+                    <option value="">🚫 No List</option>
+                    @foreach (string title in listsTitles)
+                    {
+                        <option value="@title">@title</option>
+                    }
+                </select>
+            </div>
+        <div class="filter-group">
+                <label for="status-filter">Status</label>
+                <select id="status-filter">
+                    <option value="All">🗂️ All</option>
+                        @foreach (Status status in statuses){
+                        <option value="@status">@status.StatusToFriendlyString()</option>
+                    }
+          </select>
+        </div>
+            <div class="filter-group">
+                <label for="priority-filter">Priority</label>
+                <select id="priority-filter">
+                    <option value="All">🗂️ All</option>
+                    
+                    @foreach (Priority priority in priorities)
+                    {
+                        <option value="@priority">@priority.PriorityToFriendlyString()</option>
+                    }
+                </select>
+            </div>
+        <div class="filter-group">
+                <label for="overdue-filter">Overdue</label>
+                <select id="overdue-filter">
+                    <option value="All">🗂️ All</option>
+                    <option value="true">⏰ Overdue</option>
+                    <option value="false">📅 Not Overdue</option>
+                </select>
+        </div>
+       
+        @* <div class="filter-group">
+          <label for="filter4">Filter 4</label>
+          <select id="filter4">
+            <option value="">Select...</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter5">Filter 5</label>
+          <select id="filter5">
+            <option value="">Select...</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter6">Filter 6</label>
+          <select id="filter6">
+            <option value="">Select...</option>
+          </select>
+        </div> *@
+      </div>
+      @* <div class="date-filters-container">
+        <div class="filter-group">
+          <label for="start-date">Start Date</label>
+          <input type="date" id="start-date" />
+        </div>
+        <div class="filter-group">
+          <label for="end-date">End Date</label>
+          <input type="date" id="end-date" />
+        </div>
+      </div> *@
+  </div>
+
+    <div class="container-title">My Todos - @User.Identity.Name</div>
+  <div class="todos-container">
+    @foreach (Todo todo in Model)
+    {
+      bool isHaveList = @todo.ListId is not null;
+
+        <div class="todo-card" title="@todo.Title" data-title="@todo.Title.ToLower()" data-list="@todo.List?.Title" data-priority="@todo.Priority" data-overdue="@todo.IsOverDue.ToString().ToLower()" data-status="@todo.Status.ToString()">
+        <div class="list-title"
+          style="@(isHaveList?$"color:#ffffff;background-color:rgb({@todo.List?.Color.R}, {@todo.List?.Color.G},{ @todo.List?.Color.B});":"")">
+          @(isHaveList ? todo.List?.Title : "No List")
+        </div>
+        <div class="status @todo.Status">@todo.Status.StatusToFriendlyString()</div>
+        <h5 class="title">@todo.Title</h5>
+        <p class="description">
+          @todo.Description
+        </p>
+        <p>
+          <strong>Priority:</strong> <span
+            class="priority @todo.Priority">@todo.Priority.PriorityToFriendlyString()</span>
+        </p>
+        <p class="due-date">
+          <strong>Due Date:</strong>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" top width="16" height="16" fill="#666">
+            <path
+              d="M12 7v5l3.3 3.3 1.4-1.4-2.7-2.7V7zm9 5c0 4.9-4.1 9-9 9s-9-4.1-9-9 4.1-9 9-9zm-2 0c0-3.9-3.1-7-7-7s-7 3.1-7 7 3.1 7 7 7 7-3.1 7-7z" />
+          </svg>
+          @(todo.DueDate is null ? "no due date" : todo.DueDate)
+        </p>
+        <p><strong>Overdue:</strong> @(todo.IsOverDue ? "Yes" : "No")</p>
+        <div class="card-icons">
+          <div class="icons">
+            <a title="view" href="/Todo/Update?id=@todo.Id" class="eye-icon">
+              <img src="~/vectors/eye.svg" alt="eye icon" />
+            </a>
+            <a title="remove" href="/Todo/delete?id=@todo.Id" class="delete-icon">
+              <img src="~/vectors/delete.svg" alt="delete icon" />
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+  <a class="floating-button" title="create a todo" href="/Todo/Create">+</a>
+  <script>
+        document.getElementById("search-box").addEventListener("input", filterTodos);
+        document.getElementById("list-filter").addEventListener("change", filterTodos, false);
+        document.getElementById("status-filter").addEventListener("change", filterTodos,false);
+        document.getElementById("priority-filter").addEventListener("change", filterTodos, false);
+        document.getElementById("overdue-filter").addEventListener("change", filterTodos,false);
+
+        function filterTodos() {
+            
+            const query = document.getElementById("search-box").value.toLowerCase();
+            const statusFilter = document.getElementById("status-filter").value;
+            const listFilter = document.getElementById("list-filter").value;
+            const priorityFilter = document.getElementById("priority-filter").value;
+            const overdueFilter = document.getElementById("overdue-filter").value;
+            
+            const cards = document.querySelectorAll(".todo-card");
+            
+            cards.forEach((card) => {
+                const title = card.getAttribute("data-title");
+                const description = card.querySelector(".description").textContent.toLowerCase();
+                const list = card.getAttribute("data-list");
+                const status = card.getAttribute("data-status");
+                const priority = card.getAttribute("data-priority");
+                const overdue = card.getAttribute("data-overdue");
+  
+                const matchesSearch = title.includes(query) || description.includes(query);
+                const matchesStatus = statusFilter === "All" || status === statusFilter;
+                const matchesList = listFilter === "All" || list === listFilter;
+                const matchesPriority = priorityFilter === "All" || priority === priorityFilter;
+                const matchesOverdue = overdueFilter === "All" || overdueFilter ===  overdue;
+
+
+                if (matchesSearch && matchesList && matchesStatus && matchesPriority && matchesOverdue) {
+                card.style.display = "flex";
+                }
+                else
+                {
+                card.style.display = "none";
+                }
+            });
+        }
+        
+    // document
+    //   .getElementById("search-box")
+    //   .addEventListener("input", function (e) {
+    //     const query = e.target.value.toLowerCase();
+    //     const cards = document.querySelectorAll(".todo-card");
+
+    //     cards.forEach((card) => {
+    //       const title = card
+    //         .getElementsByClassName("title")[0]
+    //         .textContent.toLowerCase();
+    //       const description = card
+    //         .getElementsByClassName("description")[0]
+    //         .textContent.toLowerCase();
+    //       if (title.includes(query) || description.includes(query)) {
+    //         card.style.display = "flex";
+    //       } else {
+    //         card.style.display = "none";
+    //       }
+    //     });
+    //   });
+  </script>
+</body>
+
+</html>

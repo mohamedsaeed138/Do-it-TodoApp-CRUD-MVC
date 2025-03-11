@@ -1,0 +1,77 @@
+﻿@model List<TodoList>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My lists - Todo App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/css/todo_list_index.css" />
+    <link rel="icon" href="~/vectors/icon.svg" type="favicon.ico" />
+</head>
+
+<body>
+    <!-- start header -->
+
+    <header class="navbar">
+        <div class="navbar-content">
+            <img src="~/vectors/logo.svg" alt="Do it" class="site-logo" />
+            <nav>
+                <a asp-controller="TodoList" asp-action="Index" class="nav-button lists">Lists</a>
+                <a asp-controller="Todo" asp-action="Index" class="nav-button todos">Todos</a>
+              <a asp-controller="Account" asp-action="Logout" class="nav-button logout">Logout @User.Identity.Name</a>
+            </nav>
+        </div>
+    </header>
+    <div class="search-container">
+        <input type="text" id="search-box" placeholder="🔍 Search lists..." />
+    </div>
+
+    <div class="container-title">My Lists - @User.Identity.Name</div>
+    <div class="todo-lists-container" id="lists">
+        @foreach (TodoList list in Model)
+        {
+            <div class="todo-list-card" title="@list.Title"
+                style="background-color: rgb(@list.Color.R, @list.Color.G, @list.Color.B)">
+                <div class="title">@list.Title</div>
+                <div class="container">
+                    <a title="edit" class="edit" href="/TodoList/Update?id=@list.Id">
+                        <img class="vector" src="~/vectors/edit.svg" />
+                    </a>
+                    <a title="delete" class="delete" href="/TodoList/Delete?id=@list.Id">
+                        <img class=" vector-1" src="~/vectors/delete.svg" />
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+        <a class="floating-button" title="create a list" href="/TodoList/Create">+</a>
+        <script>
+            // JavaScript for filtering lists
+            document
+                .getElementById("search-box")
+                .addEventListener("input", function (e) {
+                    const query = e.target.value.toLowerCase();
+                    const cards = document.querySelectorAll(".todo-list-card");
+
+                    cards.forEach((card) => {
+                        const title = card
+                            .getAttribute("title")
+                            .toLowerCase();
+                        if (title.includes(query)) {
+                            card.style.display = "flex";
+                        } else {
+                            card.style.display = "none";
+                        }
+                    });
+                });
+        </script>
+</body>
+
+</html>

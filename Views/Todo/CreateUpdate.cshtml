@@ -1,0 +1,117 @@
+﻿@using TodoApp.Helpers
+@model Todo
+@{
+    string title = (string)ViewData["Title"]!;
+    string action = (string)ViewData["Action"]!;
+    List<TodoList> todoLists = (List<TodoList>)ViewData["TodoLists"]!;
+    Priority[] priorities = (Priority[] )ViewData["Priorities"]!;
+    Status[] statuses = (Status[])ViewData["Statuses"]!;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@title Todo - Todo App</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/css/todo_form.css" />
+    <link rel="icon" href="~/vectors/icon.svg" type="favicon.ico" />
+</head>
+
+<body>
+    <!-- start header -->
+
+    <header class="navbar">
+        <div class="navbar-content">
+            <img src="~/vectors/logo.svg" alt="Do it" class="site-logo" />
+            <nav>
+                <a class="nav-button lists" asp-controller="TodoList" asp-action="Index">Lists</a>
+                <a asp-controller="Todo" asp-action="Index" class="nav-button todos">Todos</a>
+                <a asp-controller="Account" asp-action="Logout" class="nav-button logout">Logout @User.Identity.Name</a>
+            </nav>
+        </div>
+    </header>
+    <!-- end header -->
+    <!-- start form  -->
+    <section class="form">
+        <div class="container-fm">
+            <div class="form-title">
+                <h1>@title Todo</h1>
+            </div>
+            <form method="post" asp-action="@action" asp-controller="Todo">
+                <div class="form-group">
+                    <input asp-for="Id" type="hidden" value="@(Model?.Id??0)" class="form-control" />
+                    <label asp-for="Title"></label>
+                    <input asp-for="Title" value="@Model?.Title" placeholder="todo title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label >List</label>
+                    <select asp-for="ListId" class="form-control form-select">
+                        <option value="@null" selected>None</option>
+                        @foreach (TodoList list in todoLists)
+                        {
+                            <option value="@list.Id" selected="@(Model?.ListId ==list.Id )">@list.Title</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Status"></label>
+    
+                    <select asp-for="Status" class="form-control form-select">
+                      
+                        @foreach (Status status in statuses)
+                        {
+                            <option value="@status" selected="@(Model?.Status ==status)">@status.StatusToFriendlyString()</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Priority"></label>
+
+                    <select asp-for="Priority" class="form-control form-select">
+                       
+                        @foreach (Priority priority in priorities)
+                        {
+                            <option value="@priority" selected="@(Model?.Priority ==priority)">@priority.PriorityToFriendlyString()</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Due Date</label>
+                    <input asp-for="DueDate" value="@Model?.DueDate?.ToString("yyyy-MM-ddTHH:mm")" />
+                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description">
+                        @Model?.Description
+                        </textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="buttons">
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="location.href='/Todo/Index';">Back to List</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- end form  -->
+        <script src="~/js/jquery.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+</body>
+
+</html>

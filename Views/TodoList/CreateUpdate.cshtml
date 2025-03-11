@@ -1,0 +1,75 @@
+﻿@using System.Drawing
+@model TodoList
+@{
+  string? duplicatNameError = (string?)ViewData["DuplicateListName"];
+  string title = (string)ViewData["Title"]!;
+  string action = (string)ViewData["Action"]!;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>@title list - Todo App</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="~/css/todo_list_form.css" />
+  <link rel="icon" href="~/vectors/icon.svg" type="favicon.ico" />
+</head>
+
+<body>
+  <!-- start header -->
+
+  <header class="navbar">
+    <div class="navbar-content">
+      <img src="~/vectors/logo.svg" alt="Do it" class="site-logo" />
+      <nav>
+        <a class="nav-button lists" asp-controller="TodoList" asp-action="Index">Lists</a>
+        <a asp-controller="Todo" asp-action="Index" class="nav-button todos">Todos</a>
+                <a asp-controller="Account" asp-action="Logout" class="nav-button logout">Logout @User.Identity.Name</a>
+      </nav>
+    </div>
+  </header>
+  <!-- end header -->
+
+  <!-- start form  -->
+  <section class="form">
+    <div class="container-fm">
+      <div class="form-title">
+        <h1>@title list</h1>
+      </div>
+      <form method="post" asp-action="@action" asp-controller="TodoList">
+        <div class="form-group">
+          <input asp-for="Id" type="hidden" value="@(Model?.Id??0)" class="form-control" />
+          <label asp-for="Title"></label>
+          <input asp-for="Title" value="@Model?.Title" placeholder="list title" />
+          <span asp-validation-for="Title" class="text-danger"></span>
+          <span class="text-danger">@duplicatNameError</span>
+        </div>
+        <div class="form-group color-size">
+          <label asp-for="Color">Color</label>
+          <input asp-for="Color" type="color" value="@(Model is null?"":ColorTranslator.ToHtml(Model.Color))" />
+        </div>
+        <div class="buttons">
+          <button type="submit">Save</button>
+          <button type="button" onclick="location.href='/TodoList/Index';">Back to List</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <!-- end form  -->
+  
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+</body>
+
+</html>

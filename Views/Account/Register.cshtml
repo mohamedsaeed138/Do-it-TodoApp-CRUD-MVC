@@ -1,0 +1,204 @@
+﻿@model TodoApp.ViewModels.RegisterViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Todo App</title>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap"
+          rel="stylesheet" />
+
+    <link rel="icon" href="~/vectors/icon.svg" type="favicon.ico" />
+</head>
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        .site-logo {
+            height: 3rem; /* Adjust this to fit your design */
+            width: auto; /* Maintain aspect ratio */
+            padding: 0;
+            margin: 0;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+            .site-logo:hover {
+                transform: scale(1.1);
+            }
+
+        .site-logo {
+            cursor: pointer;
+        }
+
+        .site-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .mynavbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+            z-index: 1000;
+            line-height:normal;
+        }
+
+        .mynavbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem; /* Increased gap between buttons */
+        }
+
+        .mynav-button {
+            text-decoration: none;
+            color: #ffffff;
+            padding: 0.8rem 1.6rem; /* Increased padding */
+            border-radius: 0.6rem; /* Slightly larger border-radius */
+            font-size: 1.2rem; /* Larger font size */
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+
+            .mynav-button:hover {
+                transform: scale(1.1); /* Default color */
+            }
+
+            .mynav-button.lists {
+                background-color: #007bff; /* Default color */
+                color:white;
+            }
+
+            .mynav-button.todos {
+                background-color: #0fa942; /* Green for 'Lists' */
+                color: white;
+            }
+
+            .mynav-button.login {
+                background-color: #1d3edf; /* Green for 'Lists' */
+                color: white;
+            }
+
+            .mynav-button.register {
+                background-color: #d6121e; /* Green for 'Lists' */
+                color: white;
+            }
+            .mynav-button.lists:hover {
+                background-color: #0056b3;
+                color: white;
+            }
+
+            .mynav-button.todos:hover {
+                background-color: #248e47; /* Green for 'Lists' */
+                color: white;
+            }
+
+            .mynav-button.register:hover {
+                background-color: #9a2129; /* Green for 'Lists' */
+                color: white;
+            }
+
+            .mynav-button.login:hover {
+                background-color: #142577; /* Green for 'Lists' */
+                color: white;
+            }
+    @@media (max-width: 768px) {
+    .navbar-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .mynav-button {
+        padding: 0.6rem 1.2rem; /* Smaller padding */
+        font-size: 1rem; /* Smaller font size */
+        width: 100%; /* Full width for 
+        touch target */
+        text-align: center; /* Center text */
+    }
+}</style>
+    <header class="mynavbar">
+        <div class="mynavbar-content">
+            <img src="~/vectors/logo.svg" alt="Do it" class="site-logo" />
+            <nav>
+                <a class="mynav-button lists" asp-controller="TodoList" asp-action="Index">Lists</a>
+                <a asp-controller="Todo" asp-action="Index" class="mynav-button todos">Todos</a>
+                <a asp-controller="Account" asp-action="Login" class="mynav-button login">Login</a>
+                <a asp-controller="Account" asp-action="Register" class="mynav-button register">Register</a>
+            </nav>
+        </div>
+    </header>
+    <br />
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-md-4 card p-3">
+            <h2 class="text-center text-info">Register</h2>
+            <form asp-action="Register" method="post" >
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-1">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-1">
+                    <label asp-for="Username" class="control-label"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="mb-1">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="mb-1">
+                    <label asp-for="ConfirmPassword" class="control-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>              
+                <div class="row">
+                    <div class="col-8">
+                        <a asp-action="Login" class="text-decoration-none float-start mt-2">Have account?</a>
+                    </div>
+                    <div class="col-4">
+                        <input type="submit" value="Register" class="btn btn-primary btn-sm float-end" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+ 
+        <script src="~/js/jquery.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    
+</body>
+</html>
+
+
+
